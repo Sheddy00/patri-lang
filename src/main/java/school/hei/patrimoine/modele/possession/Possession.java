@@ -18,8 +18,8 @@ import school.hei.patrimoine.modele.vente.Vendable;
 @ToString
 @EqualsAndHashCode(callSuper = false)
 public abstract sealed class Possession extends Objectivable
-    implements Vendable, Serializable /*note(no-serializable)*/
-    permits AchatMaterielAuComptant,
+        implements Vendable, Serializable /*note(no-serializable)*/
+        permits AchatMaterielAuComptant,
         Compte,
         CompteCorrection,
         Correction,
@@ -93,14 +93,6 @@ public abstract sealed class Possession extends Objectivable
 
   @Override
   public void vendre(LocalDate dateVente, Argent prixVente, Compte compteBeneficiaire) {
-    if (estVendu) throw new IllegalStateException("La possession a déjà été vendue.");
-    if (compteBeneficiaire == null)
-      throw new IllegalArgumentException("Le compte bénéficiaire ne peut pas être null.");
-    if (dateVente == null)
-      throw new IllegalArgumentException("La date de vente ne peut pas être null.");
-    if (prixVente == null)
-      throw new IllegalArgumentException("Le prix de vente doit être positif.");
-
     if (estVendu) {
       throw new IllegalStateException("Possession déjà vendue");
     }
@@ -108,9 +100,6 @@ public abstract sealed class Possession extends Objectivable
     this.dateVente = dateVente;
     this.prixVente = prixVente;
 
-    Compte source = new Compte("Vente de " + nom, dateVente, this.valeurComptable);
-
-    new TransfertArgent("Vente de " + nom, source, compteBeneficiaire, dateVente, prixVente);
     new FluxArgent(
       "Vente de " + nom,
       compteBeneficiaire,
@@ -120,8 +109,8 @@ public abstract sealed class Possession extends Objectivable
   }
 
   @Override
-  public boolean estVendu() {
-    return estVendu;
+  public boolean estVendu(LocalDate t) {
+    return dateVente != null && !dateVente.isAfter(t);
   }
 
   @Override
@@ -135,9 +124,11 @@ public abstract sealed class Possession extends Objectivable
   }
 
   public void ajouterValeurMarche(ValeurMarche valeurMarche) {
-    if (typeAgregat() != TypeAgregat.IMMOBILISATION && typeAgregat() != TypeAgregat.ENTREPRISE) {
+    if (typeAgregat() != TypeAgregat.IMMOBILISATION &&
+        typeAgregat() != TypeAgregat.ENTREPRISE) {
       throw new UnsupportedOperationException(
-          "Seules les IMMOBILISATIONs et ENTREPRISEs peuvent avoir une valeur de marché");
+              "Seules les IMMOBILISATIONs et ENTREPRISEs peuvent avoir une valeur de marché"
+      );
     }
     valeursMarche.add(valeurMarche);
   }
