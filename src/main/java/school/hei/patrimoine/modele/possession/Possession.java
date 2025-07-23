@@ -9,8 +9,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import school.hei.patrimoine.modele.Argent;
 import school.hei.patrimoine.modele.Devise;
-import school.hei.patrimoine.modele.calculationMode.Factory.AddValeur;
 import school.hei.patrimoine.modele.calculationMode.AddValeurMarcheStrategy;
+import school.hei.patrimoine.modele.calculationMode.Factory.AddValeurFactory;
 import school.hei.patrimoine.modele.calculationMode.Factory.ValeurCalculationFactory;
 import school.hei.patrimoine.modele.calculationMode.ValeurCaseStrategy;
 import school.hei.patrimoine.modele.objectif.Objectivable;
@@ -47,7 +47,7 @@ public abstract sealed class Possession extends Objectivable
     this.nom = nom;
     this.t = t;
     this.valeurComptable = valeurComptable;
-    this.valeursMarche = new HashSet<>(Set.of(new ValeurMarche(t, valeurComptable)));
+    this.valeursMarche = new HashSet<>();
   }
 
   public CompteCorrection getCompteCorrection() {
@@ -55,6 +55,14 @@ public abstract sealed class Possession extends Objectivable
       compteCorrection = new CompteCorrection(nom, valeurComptable.devise());
     }
     return compteCorrection;
+  }
+
+  // for each possession for GroupPossession before call have at least 1 coherent valeur
+  public void initialiserValeurMarche() {
+    ValeurMarche valeurInitiale = new ValeurMarche(this, t, valeurComptable);
+    AddValeurMarcheStrategy addValeurMarcheStrategy =
+        AddValeurFactory.addValeurMarche(this.typeAgregat());
+    addValeurMarcheStrategy.ajouterValeur(this.valeursMarche, valeurInitiale);
   }
 
   public Argent valeurComptable() {
@@ -111,7 +119,8 @@ public abstract sealed class Possession extends Objectivable
   }
 
   public void ajouterValeurMarche(ValeurMarche valeurMarche) {
-    AddValeurMarcheStrategy addValeurMarcheStrategy = AddValeur.addValeurMarche(this.typeAgregat());
+    AddValeurMarcheStrategy addValeurMarcheStrategy =
+        AddValeurFactory.addValeurMarche(this.typeAgregat());
     addValeurMarcheStrategy.ajouterValeur(this.valeursMarche, valeurMarche);
   }
 

@@ -13,24 +13,12 @@ public class VenteTest {
   void valeur_marche_doit_stocker_correctement_les_valeurs() {
     var date = LocalDate.of(2025, 1, 1);
     var argent = new Argent(300_000, Devise.EUR);
-    var vm = new ValeurMarche(date, argent);
+    var possession = new Materiel("Bâtiment", date, date, argent, 0.0);
+    var vm = new ValeurMarche(possession, date, argent);
 
     assertEquals(date, vm.t());
     assertEquals(argent, vm.valeur());
   }
-
-  //    @Test
-  //    void vente_doit_marquer_possession_comme_vendue() {
-  //        var materiel = new Materiel("Voiture", LocalDate.now(), LocalDate.now(),
-  //                new Argent(20_000, Devise.EUR), 0.0);
-  //        var compte = new Compte("Compte courant", LocalDate.now(), new Argent(0, Devise.EUR));
-  //
-  //        materiel.vendre(LocalDate.now(), new Argent(25_000, Devise.EUR), compte);
-  //
-  //        assertTrue(materiel.estVendu(LocalDate.now()));
-  //        assertEquals(LocalDate.now(), materiel.getDateVente());
-  //        assertEquals(new Argent(25_000, Devise.EUR), materiel.getPrixVente());
-  //    }
 
   @Test
   void vente_doit_transferer_argent_vers_compte() {
@@ -65,9 +53,12 @@ public class VenteTest {
             "Bâtiment", LocalDate.now(), LocalDate.now(), new Argent(200_000, Devise.EUR), 0.0);
     var date1 = LocalDate.of(2025, 1, 1);
     var date2 = LocalDate.of(2025, 6, 1);
+    var possession = new Materiel("Bâtiment", date1, date2, new Argent(200_000, Devise.EUR), 0.0);
 
-    materiel.ajouterValeurMarche(new ValeurMarche(date1, new Argent(250_000, Devise.EUR)));
-    materiel.ajouterValeurMarche(new ValeurMarche(date2, new Argent(300_000, Devise.EUR)));
+    materiel.ajouterValeurMarche(
+        new ValeurMarche(possession, date1, new Argent(250_000, Devise.EUR)));
+    materiel.ajouterValeurMarche(
+        new ValeurMarche(possession, date2, new Argent(300_000, Devise.EUR)));
 
     assertEquals(new Argent(250_000, Devise.EUR), materiel.getValeurMarche(date1));
     assertEquals(new Argent(300_000, Devise.EUR), materiel.getValeurMarche(date2));
@@ -86,4 +77,18 @@ public class VenteTest {
         IllegalStateException.class,
         () -> materiel.vendre(LocalDate.now(), new Argent(30_000, Devise.EUR), compte));
   }
+
+  //    @Test
+  //    void vente_doit_marquer_possession_comme_vendue() {
+  //        var materiel = new Materiel("Voiture", LocalDate.now(), LocalDate.now(),
+  //                new Argent(20_000, Devise.EUR), 0.0);
+  //        var compte = new Compte("Compte courant", LocalDate.now(), new Argent(0, Devise.EUR));
+  //
+  //        materiel.vendre(LocalDate.now(), new Argent(25_000, Devise.EUR), compte);
+  //
+  //        assertTrue(materiel.estVendu(LocalDate.now()));
+  //        assertEquals(LocalDate.now(), materiel.getDateVente());
+  //        assertEquals(new Argent(25_000, Devise.EUR), materiel.getPrixVente());
+  //    }
+
 }
