@@ -6,7 +6,7 @@ import school.hei.patrimoine.modele.Argent;
 import school.hei.patrimoine.modele.possession.Possession;
 import school.hei.patrimoine.modele.vente.ValeurMarche;
 
-public class ValeurMarcheHistorique implements ValeurMarcheCase {
+public class ValeurHistoriqueStrategy implements ValeurCaseStrategy {
   @Override
   public Argent calculateValeurCase(Possession possession, LocalDate date) {
     return possession.historiqueValeurMarche().stream()

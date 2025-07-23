@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import school.hei.patrimoine.modele.Argent;
 import school.hei.patrimoine.modele.possession.Possession;
 
-public class ValeurComptable implements ValeurMarcheCase {
+public class ValeurComptableStrategy implements ValeurCaseStrategy {
 
   @Override
   public Argent calculateValeurCase(Possession possession, LocalDate date) {

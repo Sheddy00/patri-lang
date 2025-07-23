@@ -4,6 +4,6 @@ import java.time.LocalDate;
 import school.hei.patrimoine.modele.Argent;
 import school.hei.patrimoine.modele.possession.Possession;
 
-public interface ValeurMarcheCase {
+public interface ValeurCaseStrategy {
   Argent calculateValeurCase(Possession possession, LocalDate date);
 }

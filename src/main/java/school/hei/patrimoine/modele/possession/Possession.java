@@ -9,8 +9,10 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import school.hei.patrimoine.modele.Argent;
 import school.hei.patrimoine.modele.Devise;
-import school.hei.patrimoine.modele.calculationMode.ValeurCalculation;
-import school.hei.patrimoine.modele.calculationMode.ValeurMarcheCase;
+import school.hei.patrimoine.modele.calculationMode.Factory.AddValeur;
+import school.hei.patrimoine.modele.calculationMode.AddValeurMarcheStrategy;
+import school.hei.patrimoine.modele.calculationMode.Factory.ValeurCalculationFactory;
+import school.hei.patrimoine.modele.calculationMode.ValeurCaseStrategy;
 import school.hei.patrimoine.modele.objectif.Objectivable;
 import school.hei.patrimoine.modele.vente.ValeurMarche;
 import school.hei.patrimoine.modele.vente.Vendable;
@@ -81,11 +83,6 @@ public abstract sealed class Possession extends Objectivable
     return projectionFuture(t).valeurComptable;
   }
 
-  public Argent getValeurMarche(LocalDate t) {
-    ValeurMarcheCase calculator = ValeurCalculation.getCalculation(this.typeAgregat());
-    return calculator.calculateValeurCase(this, t);
-  }
-
   @Override
   public void vendre(LocalDate dateVente, Argent prixVente, Compte compteBeneficiaire) {
     if (estVendu) {
@@ -114,11 +111,13 @@ public abstract sealed class Possession extends Objectivable
   }
 
   public void ajouterValeurMarche(ValeurMarche valeurMarche) {
-    if (typeAgregat() != TypeAgregat.IMMOBILISATION && typeAgregat() != TypeAgregat.ENTREPRISE) {
-      throw new UnsupportedOperationException(
-          "Seules les IMMOBILISATIONs et ENTREPRISEs peuvent avoir une valeur de marché");
-    }
-    valeursMarche.add(valeurMarche);
+    AddValeurMarcheStrategy addValeurMarcheStrategy = AddValeur.addValeurMarche(this.typeAgregat());
+    addValeurMarcheStrategy.ajouterValeur(this.valeursMarche, valeurMarche);
+  }
+
+  public Argent getValeurMarche(LocalDate t) {
+    ValeurCaseStrategy calculator = ValeurCalculationFactory.getCalculation(this.typeAgregat());
+    return calculator.calculateValeurCase(this, t);
   }
 
   public Set<ValeurMarche> historiqueValeurMarche() {
