@@ -2,15 +2,15 @@ package school.hei.patrimoine.modele.possession;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import school.hei.patrimoine.modele.Argent;
 import school.hei.patrimoine.modele.Devise;
+import school.hei.patrimoine.modele.calculationMode.ValeurCalculation;
+import school.hei.patrimoine.modele.calculationMode.ValeurMarcheCase;
 import school.hei.patrimoine.modele.objectif.Objectivable;
 import school.hei.patrimoine.modele.vente.ValeurMarche;
 import school.hei.patrimoine.modele.vente.Vendable;
@@ -18,8 +18,8 @@ import school.hei.patrimoine.modele.vente.Vendable;
 @ToString
 @EqualsAndHashCode(callSuper = false)
 public abstract sealed class Possession extends Objectivable
-        implements Vendable, Serializable /*note(no-serializable)*/
-        permits AchatMaterielAuComptant,
+    implements Vendable, Serializable /*note(no-serializable)*/
+    permits AchatMaterielAuComptant,
         Compte,
         CompteCorrection,
         Correction,
@@ -81,14 +81,9 @@ public abstract sealed class Possession extends Objectivable
     return projectionFuture(t).valeurComptable;
   }
 
-  @Override
   public Argent getValeurMarche(LocalDate t) {
-    return valeursMarche.stream()
-            .filter(vm -> !vm.t().isAfter(t))
-            .max(Comparator.comparing(ValeurMarche::t))
-            .map(ValeurMarche::valeur)
-            .orElse(valeurComptable);
-
+    ValeurMarcheCase calculator = ValeurCalculation.getCalculation(this.typeAgregat());
+    return calculator.calculateValeurCase(this, t);
   }
 
   @Override
@@ -100,12 +95,7 @@ public abstract sealed class Possession extends Objectivable
     this.dateVente = dateVente;
     this.prixVente = prixVente;
 
-    new FluxArgent(
-      "Vente de " + nom,
-      compteBeneficiaire,
-      dateVente,
-      prixVente
-    );
+    new FluxArgent("Vente de " + nom, compteBeneficiaire, dateVente, prixVente);
   }
 
   @Override
@@ -124,11 +114,9 @@ public abstract sealed class Possession extends Objectivable
   }
 
   public void ajouterValeurMarche(ValeurMarche valeurMarche) {
-    if (typeAgregat() != TypeAgregat.IMMOBILISATION &&
-        typeAgregat() != TypeAgregat.ENTREPRISE) {
+    if (typeAgregat() != TypeAgregat.IMMOBILISATION && typeAgregat() != TypeAgregat.ENTREPRISE) {
       throw new UnsupportedOperationException(
-              "Seules les IMMOBILISATIONs et ENTREPRISEs peuvent avoir une valeur de marché"
-      );
+          "Seules les IMMOBILISATIONs et ENTREPRISEs peuvent avoir une valeur de marché");
     }
     valeursMarche.add(valeurMarche);
   }
