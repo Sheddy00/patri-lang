@@ -10,7 +10,7 @@ public class ValeurCalculationFactory {
   public static ValeurCaseStrategy getCalculation(TypeAgregat typeAgregat) {
     return switch (typeAgregat) {
       case IMMOBILISATION, ENTREPRISE -> new ValeurHistoriqueStrategy();
-      default -> new ValeurComptableStrategy();
+      case PATRIMOINE, TRESORERIE, OBLIGATION, FLUX, CORRECTION -> new ValeurComptableStrategy();
     };
   }
 }

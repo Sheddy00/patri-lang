@@ -20,11 +20,10 @@ public final class GroupePossession extends Possession {
             .map(Possession::valeurComptable)
             .reduce(new Argent(0, devise), (a1, a2) -> a1.add(a2, t)));
     this.possessions = possessions;
-    initialiserValeurMarche(); // initialize valeursMarche with empty set as it is not set in
-    // constructor
-    // (GroupePossession can combine different types of possessions global value/initial historique
-    // value
     typeAgregat(possessions); // sanity check: fails if set is inconsistent
+    initialiserValeurMarche(); // initialize valeursMarche with empty set as it is not set in
+    // (GroupePossession can combine different types of possessions global value/initial historique
+
   }
 
   @Override
