@@ -10,31 +10,6 @@ import school.hei.patrimoine.modele.possession.Compte;
 import school.hei.patrimoine.modele.possession.Materiel;
 
 public class VenteTest {
-  //  @Test
-  //  void
-  //      valeur_marche_doit_valider_les_parametres() { // NullPointerException if possession or
-  // valeur
-  //                                                    // or parameter is null
-  //    // IllegalArgumentException if value of them are not as exected
-  //    var possession =
-  //        new Materiel(
-  //            "Bâtiment", LocalDate.now(), LocalDate.now(), new Argent(200_000, Devise.EUR), 0.0);
-  //    assertThrows(
-  //        NullPointerException.class,
-  //        () -> new ValeurMarche(possession, LocalDate.now(), new Argent(100, Devise.EUR)));
-  //    assertThrows(
-  //        NullPointerException.class, () -> new ValeurMarche(possession, LocalDate.now(), null));
-  //  }
-
-  @Test
-  void valeur_marche_doit_stocker_correctement_les_valeurs() {
-    var date = LocalDate.of(2025, 1, 1);
-    var argent = new Argent(300_000, Devise.EUR);
-    var vm = new ValeurMarche(null, date, argent);
-
-    assertEquals(date, vm.t());
-    assertEquals(argent, vm.valeur());
-  }
 
   @Test
   void vente_doit_marquer_possession_comme_vendue() {

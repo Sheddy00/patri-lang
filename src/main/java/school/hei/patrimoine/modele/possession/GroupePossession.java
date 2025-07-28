@@ -21,9 +21,6 @@ public final class GroupePossession extends Possession {
             .reduce(new Argent(0, devise), (a1, a2) -> a1.add(a2, t)));
     this.possessions = possessions;
     typeAgregat(possessions); // sanity check: fails if set is inconsistent
-    initialiserValeurMarche(); // initialize valeursMarche with empty set as it is not set in
-    // (GroupePossession can combine different types of possessions global value/initial historique
-
   }
 
   @Override

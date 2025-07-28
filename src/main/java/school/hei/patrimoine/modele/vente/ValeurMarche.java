@@ -12,6 +12,7 @@ public record ValeurMarche(Possession possession, LocalDate t, Argent valeur)
     this.possession = possession;
     this.t = t;
     this.valeur = valeur;
+    this.possession.ajouterValeurMarche(this);
   }
 
   // stackoverflow equals and hashCode as infinite loop for possession if not exclude possession
