@@ -1,7 +1,6 @@
 package school.hei.patrimoine.modele.vente;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -22,6 +21,17 @@ public class ValeurMarcheHistoriqueTest {
     aujourdhui = LocalDate.now();
     valeurInitiale = new Argent(1000, Devise.EUR);
     materiel = new Materiel("Ordinateur", aujourdhui, aujourdhui, valeurInitiale, 0.05);
+    new ValeurMarche(materiel, aujourdhui, valeurInitiale);
+  }
+
+  @Test
+  void historique_valeur_marche_contient_valeur_initiale() {
+    Set<ValeurMarche> historique = materiel.historiqueValeurMarche();
+    assertEquals(1, historique.size());
+    ValeurMarche premiereValeur = historique.iterator().next();
+    assertEquals(materiel, premiereValeur.possession());
+    assertEquals(aujourdhui, premiereValeur.t());
+    assertEquals(valeurInitiale, premiereValeur.valeur());
   }
 
   @Test
@@ -34,36 +44,28 @@ public class ValeurMarcheHistoriqueTest {
   }
 
   @Test
-  void historique_valeur_marche_contient_valeur_initiale() {
+  void historique_valeur_marche_apres_ajout_nouvelle_valeur() {
+    LocalDate demain = aujourdhui.plusDays(1);
+    Argent nouvelleValeur = new Argent(1050, Devise.EUR);
+    materiel.ajouterValeurMarche(new ValeurMarche(materiel, demain, nouvelleValeur));
+
     Set<ValeurMarche> historique = materiel.historiqueValeurMarche();
 
-    assertEquals(1, historique.size());
-    ValeurMarche premiereValeur = historique.iterator().next();
-    assertEquals(aujourdhui, premiereValeur.t());
-    assertEquals(valeurInitiale, premiereValeur.valeur());
+    assertEquals(2, historique.size());
+    assertTrue(historique.contains(new ValeurMarche(materiel, aujourdhui, valeurInitiale)));
+    assertTrue(historique.contains(new ValeurMarche(materiel, demain, nouvelleValeur)));
   }
 
-  /*
-    @Test
-    void historique_valeur_marche_apres_ajout_nouvelle_valeur() {
-      LocalDate demain = aujourdhui.plusDays(1);
-      Argent nouvelleValeur = new Argent(1050, Devise.EUR);
-      materiel.ajouterValeurMarche(new ValeurMarche(demain, nouvelleValeur));
-
-      Set<ValeurMarche> historique = materiel.historiqueValeurMarche();
-
-      assertEquals(2, historique.size());
-      assertTrue(historique.contains(new ValeurMarche(aujourdhui, valeurInitiale)));
-      assertTrue(historique.contains(new ValeurMarche(demain, nouvelleValeur)));
-    }
-  */
   @Test
   void historique_valeur_marche_pour_type_non_eligible() {
     Compte compte = new Compte("Compte Courant", aujourdhui, valeurInitiale);
 
-    Set<ValeurMarche> historique = compte.historiqueValeurMarche();
+    assertThrows(
+        UnsupportedOperationException.class,
+        () -> {
+          compte.ajouterValeurMarche(new ValeurMarche(compte, aujourdhui, valeurInitiale));
+        });
 
-    assertEquals(1, historique.size());
-    assertEquals(valeurInitiale, historique.iterator().next().valeur());
+    assertEquals(0, compte.historiqueValeurMarche().size());
   }
 }

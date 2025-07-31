@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @ToString
 @AllArgsConstructor
 public class Argent implements Serializable {
-  private final double montant;
+  @Getter private final double montant;
 
   @Accessors(fluent = true)
   @Getter
