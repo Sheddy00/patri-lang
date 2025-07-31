@@ -7,10 +7,7 @@ public class AddValeurOther implements AddValeurMarcheStrategy<ValeurMarche> {
 
   @Override
   public void ajouterValeur(Collection<ValeurMarche> valeursMarche, ValeurMarche valeurComptable) {
-    valeursMarche.add(
-        new ValeurMarche(
-            valeurComptable.possession(),
-            valeurComptable.t(),
-            valeurComptable.possession().valeurComptable()));
+    throw new UnsupportedOperationException(
+        "Seules les IMMOBILISATIONs et ENTREPRISEs peuvent avoir une valeur de marché");
   }
 }
