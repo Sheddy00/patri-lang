@@ -39,7 +39,6 @@ public abstract sealed class Possession extends Objectivable
   @EqualsAndHashCode.Exclude protected final Set<ValeurMarche> valeursMarche;
 
   @EqualsAndHashCode.Exclude @ToString.Exclude private CompteCorrection compteCorrection;
-  @EqualsAndHashCode.Exclude @ToString.Exclude private boolean estVendu = false;
   @EqualsAndHashCode.Exclude @ToString.Exclude private LocalDate dateVente;
   @EqualsAndHashCode.Exclude @ToString.Exclude private Argent prixVente;
 
@@ -58,7 +57,7 @@ public abstract sealed class Possession extends Objectivable
   }
 
   public Argent valeurComptable() {
-    return estVendu ? new Argent(0, devise()) : valeurComptable;
+    return estVendu(LocalDate.MAX) ? new Argent(0, devise()) : valeurComptable;
   }
 
   public final Devise devise() {
@@ -85,13 +84,11 @@ public abstract sealed class Possession extends Objectivable
 
   @Override
   public void vendre(LocalDate dateVente, Argent prixVente, Compte compteBeneficiaire) {
-    if (estVendu) {
+    if (estVendu(dateVente)) {
       throw new IllegalStateException("Possession déjà vendue");
     }
-    this.estVendu = true;
     this.dateVente = dateVente;
     this.prixVente = prixVente;
-
     new FluxArgent("Vente de " + nom, compteBeneficiaire, dateVente, prixVente);
   }
 
@@ -122,6 +119,6 @@ public abstract sealed class Possession extends Objectivable
   }
 
   public Set<ValeurMarche> historiqueValeurMarche() {
-    return new HashSet<>(valeursMarche);
+    return valeursMarche;
   }
 }

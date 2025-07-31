@@ -10,7 +10,7 @@ public class ValeurHistoriqueStrategy implements ValeurCaseStrategy {
   @Override
   public Argent calculateValeurCase(Possession possession, LocalDate date) {
     return possession.historiqueValeurMarche().stream()
-        .filter(valeurMarche -> valeurMarche.t().isBefore(date))
+        .filter(valeurMarche -> valeurMarche.t().isBefore(date) || valeurMarche.t().isEqual(date))
         .max(Comparator.comparing(ValeurMarche::t))
         .map(ValeurMarche::valeur)
         .orElse(possession.valeurComptable());
