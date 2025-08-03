@@ -6,29 +6,35 @@ import static school.hei.patrimoine.patrilang.antlr.PatriLangParser.PossedeMater
 import static school.hei.patrimoine.patrilang.modele.variable.VariableType.DATE;
 
 import java.time.LocalDate;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import school.hei.patrimoine.modele.possession.Materiel;
 import school.hei.patrimoine.patrilang.antlr.PatriLangParser;
+import school.hei.patrimoine.patrilang.modele.variable.Variable;
+import school.hei.patrimoine.patrilang.modele.variable.VariableType;
 import school.hei.patrimoine.patrilang.utils.UnitTestVisitor;
 import school.hei.patrimoine.patrilang.visitors.possession.MaterielVisitor;
 import school.hei.patrimoine.patrilang.visitors.variable.VariableVisitor;
 
 class MaterielVisitorTest {
-  private static final LocalDate AJD = LocalDate.of(2025, 6, 23);
-  private static final VariableVisitor variableVisitor = new VariableVisitor();
+  private static LocalDate AJD = LocalDate.of(2025, 6, 23);
+  private static VariableVisitor variableVisitor = new VariableVisitor();
+  private static UnitTestVisitor visitor;
 
   MaterielVisitor subject = new MaterielVisitor(variableVisitor);
 
-  UnitTestVisitor visitor =
-      new UnitTestVisitor() {
-        @Override
-        public Materiel visitPossedeMateriel(PossedeMaterielContext ctx) {
-          return subject.apply(ctx);
-        }
-      };
-
-  static {
+  @BeforeEach
+  void resetScope() {
+    variableVisitor = new VariableVisitor();
     variableVisitor.addToScope("ajd", DATE, AJD);
+    subject = new MaterielVisitor(variableVisitor);
+    visitor =
+        new UnitTestVisitor() {
+          @Override
+          public Materiel visitPossedeMateriel(PossedeMaterielContext ctx) {
+            return subject.apply(ctx);
+          }
+        };
   }
 
   @Test
@@ -67,5 +73,20 @@ class MaterielVisitorTest {
     assertEquals(
         expected.projectionFuture(au1Janvier2026).valeurComptable(),
         actual.projectionFuture(au1Janvier2026).valeurComptable());
+  }
+
+  @Test
+  void should_handle_materiel_scope() {
+    var input =
+        """
+    * `possèdeMateriel`, Dates:ajd posséder ordinateur valant 200000Ar, s'appréciant annuellement de 1%
+""";
+    Materiel actual = visitor.visit(input, PatriLangParser::possedeMateriel);
+
+    Variable<?> variable =
+        variableVisitor.getVariableScope().get("ordinateur", VariableType.MATERIEL);
+    Materiel fromScope = (Materiel) variable.value();
+    assertEquals(actual.nom(), fromScope.nom());
+    assertEquals("ordinateur", fromScope.nom());
   }
 }

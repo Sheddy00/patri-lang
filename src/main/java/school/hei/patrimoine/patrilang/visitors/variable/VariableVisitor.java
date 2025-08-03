@@ -3,6 +3,7 @@ package school.hei.patrimoine.patrilang.visitors.variable;
 import static java.util.Objects.nonNull;
 import static school.hei.patrimoine.patrilang.antlr.PatriLangParser.VariableContext;
 import static school.hei.patrimoine.patrilang.modele.variable.VariableType.DATE;
+import static school.hei.patrimoine.patrilang.modele.variable.VariableType.MATERIEL;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -96,7 +97,7 @@ public class VariableVisitor implements SimpleVisitor<VariableContext, Variable<
   public Variable<?> apply(VariableContext ctx) {
     if (nonNull(ctx.argent())) {
       var value = variableArgentVisitor.apply(ctx.argent());
-      return new Variable<>(R_VALUE_VARIABLE_NAME, DATE, value);
+      return new Variable<>(R_VALUE_VARIABLE_NAME, DATE, value); // Check DATE?
     }
 
     if (nonNull(ctx.date())) {
@@ -107,6 +108,13 @@ public class VariableVisitor implements SimpleVisitor<VariableContext, Variable<
     if (nonNull(ctx.expression())) {
       var value = variableExpressionVisitor.apply(ctx.expression());
       return new Variable<>(R_VALUE_VARIABLE_NAME, DATE, value);
+    }
+
+    if (nonNull(ctx.VARIABLE())) {
+      String varText = ctx.VARIABLE().getText();
+      if (varText.startsWith("Materiel:")) {
+        return variableScope.get(varText.substring("Materiel:".length()), MATERIEL);
+      }
     }
 
     var name = extractVariableName(ctx.VARIABLE().getText());
