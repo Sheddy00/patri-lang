@@ -83,8 +83,7 @@ class MaterielVisitorTest {
 """;
     Materiel actual = visitor.visit(input, PatriLangParser::possedeMateriel);
 
-    Variable<?> variable =
-        variableVisitor.getVariableScope().get("ordinateur", VariableType.MATERIEL);
+    Variable variable = variableVisitor.getVariableScope().get("ordinateur", VariableType.MATERIEL);
     Materiel fromScope = (Materiel) variable.value();
     assertEquals(actual.nom(), fromScope.nom());
     assertEquals("ordinateur", fromScope.nom());
