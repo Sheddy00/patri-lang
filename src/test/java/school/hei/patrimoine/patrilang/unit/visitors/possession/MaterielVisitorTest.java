@@ -111,6 +111,7 @@ class MaterielVisitorTest {
     assertEquals(expected.nom(), actual.getPossession().nom());
     assertEquals(compteBeneficiaire, actual.getCompteBeneficiaire());
     assertEquals(ariary(150_000), actual.getPrixVente());
+    assertEquals(ariary(150_000), compteBeneficiaire.projectionFuture(AJD).valeurComptable());
     assertTrue(expected.estVendu(AJD));
 
     var actualVariable = variableVisitor.getVariableScope().get("ordinateur", MATERIEL);
