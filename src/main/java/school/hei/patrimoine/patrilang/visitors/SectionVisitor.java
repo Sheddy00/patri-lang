@@ -18,7 +18,6 @@ import school.hei.patrimoine.cas.Cas;
 import school.hei.patrimoine.modele.Personne;
 import school.hei.patrimoine.modele.possession.*;
 import school.hei.patrimoine.patrilang.factory.SectionVisitorFactory;
-import school.hei.patrimoine.patrilang.modele.variable.VariableType;
 import school.hei.patrimoine.patrilang.visitors.possession.*;
 import school.hei.patrimoine.patrilang.visitors.variable.VariableVisitor;
 
@@ -105,17 +104,17 @@ public class SectionVisitor {
 
   public Set<Compte> visitSectionTrésoreries(SectionTresoreriesContext ctx) {
     return visitCompteElements(
-        TRESORERIES, ctx.compteElement(), this.compteVisitor, this.variableVisitor::asCompte);
+        ctx.compteElement(), this.compteVisitor, this.variableVisitor::asCompte);
   }
 
   public Set<Creance> visitSectionCréances(SectionCreancesContext ctx) {
     return visitCompteElements(
-        CREANCE, ctx.compteElement(), this.creanceVisitor, this.variableVisitor::asCreance);
+        ctx.compteElement(), this.creanceVisitor, this.variableVisitor::asCreance);
   }
 
   public Set<Dette> visitSectionDettes(SectionDettesContext ctx) {
     return visitCompteElements(
-        DETTE, ctx.compteElement(), this.detteVisitor, this.variableVisitor::asDette);
+        ctx.compteElement(), this.detteVisitor, this.variableVisitor::asDette);
   }
 
   public Set<Possession> visitSectionOperations(SectionOperationsContext ctx) {
@@ -123,7 +122,6 @@ public class SectionVisitor {
   }
 
   private <T extends Possession> Set<T> visitCompteElements(
-      VariableType type,
       List<CompteElementContext> elements,
       SimpleVisitor<CompteContext, T> visitor,
       SimpleVisitor<VariableContext, T> variableGetter) {
@@ -134,9 +132,7 @@ public class SectionVisitor {
                 return variableGetter.apply(element.variable());
               }
 
-              var value = visitor.apply(element.compte());
-              this.variableVisitor.addToScope(value.nom(), type, value);
-              return value;
+              return visitor.apply(element.compte());
             })
         .collect(toSet());
   }
