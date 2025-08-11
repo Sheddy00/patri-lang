@@ -1,6 +1,7 @@
 package school.hei.patrimoine.patrilang.visitors.possession;
 
 import static school.hei.patrimoine.patrilang.antlr.PatriLangParser.CompteContext;
+import static school.hei.patrimoine.patrilang.modele.variable.VariableType.CREANCE;
 import static school.hei.patrimoine.patrilang.visitors.BaseVisitor.visitText;
 
 import java.time.LocalDate;
@@ -20,6 +21,12 @@ public class CreanceVisitor implements SimpleVisitor<CompteContext, Creance> {
     Argent valeurComptable = this.variableVisitor.asArgent(ctx.valeurComptable);
     LocalDate t = this.variableVisitor.asDate(ctx.dateValue);
 
-    return new Creance(nom, t, valeurComptable);
+    Creance creance = new Creance(nom, t, valeurComptable);
+    variableVisitor.addToScope(nom, CREANCE, creance);
+    variableVisitor
+        .getVariableScope()
+        .parentScope()
+        .ifPresent(parent -> parent.add(nom, CREANCE, creance));
+    return creance;
   }
 }
