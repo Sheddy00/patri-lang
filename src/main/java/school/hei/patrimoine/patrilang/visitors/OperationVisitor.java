@@ -5,7 +5,6 @@ import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toSet;
 import static school.hei.patrimoine.patrilang.antlr.PatriLangParser.OperationContext;
 import static school.hei.patrimoine.patrilang.antlr.PatriLangParser.OperationsContext;
-import static school.hei.patrimoine.patrilang.modele.variable.VariableType.MATERIEL;
 import static school.hei.patrimoine.patrilang.visitors.variable.VariableVisitor.extractVariableName;
 import static school.hei.patrimoine.patrilang.visitors.variable.VariableVisitor.extractVariableType;
 
@@ -14,7 +13,6 @@ import java.util.Set;
 import java.util.function.BiFunction;
 import lombok.Builder;
 import lombok.Getter;
-import school.hei.patrimoine.modele.possession.Materiel;
 import school.hei.patrimoine.modele.possession.Possession;
 import school.hei.patrimoine.patrilang.visitors.possession.*;
 import school.hei.patrimoine.patrilang.visitors.variable.VariableVisitor;
@@ -75,12 +73,7 @@ public class OperationVisitor
     }
 
     if (nonNull(ctx.possedeMateriel())) {
-      Materiel materiel = this.materielVisitor.apply(ctx.possedeMateriel());
-      variableVisitor
-          .getVariableScope()
-          .parentScope()
-          .ifPresent(parent -> parent.add(materiel.nom(), MATERIEL, materiel));
-      return Set.of(materiel);
+      return Set.of(this.materielVisitor.apply(ctx.possedeMateriel()));
     }
 
     if (nonNull(ctx.correction())) {
