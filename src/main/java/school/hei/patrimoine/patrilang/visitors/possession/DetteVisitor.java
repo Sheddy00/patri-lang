@@ -1,6 +1,7 @@
 package school.hei.patrimoine.patrilang.visitors.possession;
 
 import static school.hei.patrimoine.patrilang.antlr.PatriLangParser.CompteContext;
+import static school.hei.patrimoine.patrilang.modele.variable.VariableType.DETTE;
 import static school.hei.patrimoine.patrilang.visitors.BaseVisitor.visitText;
 
 import java.time.LocalDate;
@@ -20,6 +21,12 @@ public class DetteVisitor implements SimpleVisitor<CompteContext, Dette> {
     Argent valeurComptable = this.variableVisitor.asArgent(ctx.valeurComptable);
     LocalDate t = this.variableVisitor.asDate(ctx.dateValue);
 
-    return new Dette(nom, t, valeurComptable.mult(-1));
+    Dette dette = new Dette(nom, t, valeurComptable.mult(-1));
+    variableVisitor.addToScope(nom, DETTE, dette);
+    variableVisitor
+        .getVariableScope()
+        .parentScope()
+        .ifPresent(parent -> parent.add(nom, DETTE, dette));
+    return dette;
   }
 }

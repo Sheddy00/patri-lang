@@ -1,6 +1,7 @@
 package school.hei.patrimoine.patrilang.visitors.possession;
 
 import static school.hei.patrimoine.patrilang.antlr.PatriLangParser.CompteContext;
+import static school.hei.patrimoine.patrilang.modele.variable.VariableType.TRESORERIES;
 import static school.hei.patrimoine.patrilang.visitors.BaseVisitor.visitText;
 
 import java.time.LocalDate;
@@ -20,6 +21,12 @@ public class CompteVisitor implements SimpleVisitor<CompteContext, Compte> {
     Argent valeurComptable = this.variableVisitor.asArgent(ctx.valeurComptable);
     LocalDate t = this.variableVisitor.asDate(ctx.dateValue);
 
-    return new Compte(nom, t, valeurComptable);
+    Compte compte = new Compte(nom, t, valeurComptable);
+    variableVisitor.addToScope(nom, TRESORERIES, compte);
+    variableVisitor
+        .getVariableScope()
+        .parentScope()
+        .ifPresent(parent -> parent.add(nom, TRESORERIES, compte));
+    return compte;
   }
 }
