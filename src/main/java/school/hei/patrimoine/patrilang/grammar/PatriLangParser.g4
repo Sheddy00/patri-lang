@@ -204,7 +204,7 @@ acheterMateriel
     ;
 
 possedeMateriel
-    :   MUL id COMMA? dateValue=variable COMMA? MOT_POSSEDER materielNom=materielName COMMA? MOT_VALANT valeurComptable=variable (MOT_OBTENU dateObtention=variable)? COMMA? MATERIEL_APPRECIATION MOT_ANNUELLEMENT_DE pourcentageAppreciation=variable PERCENT
+    :   MUL id COMMA? dateValue=variable COMMA? MOT_POSSEDER materielNom=text COMMA? MOT_VALANT valeurComptable=variable (MOT_OBTENU dateObtention=variable)? COMMA? MATERIEL_APPRECIATION MOT_ANNUELLEMENT_DE pourcentageAppreciation=variable PERCENT
     ;
 
 rembourserDette
