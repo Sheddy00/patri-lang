@@ -7,7 +7,6 @@ import static school.hei.patrimoine.patrilang.modele.variable.VariableType.NOMBR
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import school.hei.patrimoine.modele.Argent;
 import school.hei.patrimoine.patrilang.antlr.PatriLangParser;
 import school.hei.patrimoine.patrilang.utils.UnitTestVisitor;
 import school.hei.patrimoine.patrilang.visitors.variable.VariableArgentVisitor;
@@ -148,6 +147,15 @@ class VariableArgentVisitorTest {
   void parse_argent_all_complexe_operation() {
     var input = "((((50000Ar - (-50000Ar)) / 2) * 5) * 5) évalué le 01 Juin 2025";
     var expected = ariary(1_250_000);
+
+    var actual = visitor.visit(input, PatriLangParser::argent);
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  void parse_argent_with_long_operations() {
+    var input = "((500000Ar + 200000Ar + 700000Ar + (-100000Ar) + 500000Ar + 500000Ar + 500000Ar + (-500000Ar) + (-500000Ar)) / 4)  évalué le 01 Mai 2025";
+    var expected = ariary(450_000);
 
     var actual = visitor.visit(input, PatriLangParser::argent);
     assertEquals(expected, actual);
