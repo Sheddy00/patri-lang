@@ -40,4 +40,8 @@ public record VariableScope(VariableContainer container, Optional<VariableScope>
   public <T> void add(String name, VariableType type, T value) {
     this.container.add(new Variable(name, type, value));
   }
+
+  public VariableScope root() {
+    return parentScope.map(VariableScope::root).orElse(this);
+  }
 }
