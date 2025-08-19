@@ -25,6 +25,8 @@ public class SectionVisitorFactory {
         .compteVisitor(new CompteVisitor(variableVisitor))
         .creanceVisitor(new CreanceVisitor(variableVisitor))
         .detteVisitor(new DetteVisitor(variableVisitor))
+        .valeurMarcheVisitor(new ValeurMarcheVisitor(variableVisitor))
+        .venteVisitor(new VenteVisitor(variableVisitor))
         .build();
   }
 }
