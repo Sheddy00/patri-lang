@@ -6,7 +6,7 @@ import school.hei.patrimoine.visualisation.xchart.GrapheConf;
 
 @Getter
 public final class GrapheConfState extends State {
-  private GrapheConf grapheConf = new GrapheConf(false, true, true, true, true);
+  private GrapheConf grapheConf = new GrapheConf(false, true, true, true, true, true);
 
   public GrapheConfState() {
     super();
