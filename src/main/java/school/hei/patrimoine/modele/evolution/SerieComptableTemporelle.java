@@ -99,4 +99,18 @@ public class SerieComptableTemporelle {
     // ppMontant explicitely indicates that it should only be used for printing purpose.
     return (int) parseDouble(a.ppMontant());
   }
+
+  public List<Integer> serieValeursMarchePatrimoine() {
+    var serie = new ArrayList<Integer>();
+    serieDates()
+        .forEach(
+            d ->
+                serie.add(
+                    parseMontant(
+                        ep.getEvolutionJournaliere()
+                            .get(d)
+                            .getValeurMarche()
+                            .convertir(devise, d))));
+    return serie;
+  }
 }

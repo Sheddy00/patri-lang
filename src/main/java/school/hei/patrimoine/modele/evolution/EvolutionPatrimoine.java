@@ -84,4 +84,8 @@ public class EvolutionPatrimoine {
     serieDates().forEach(date -> evolutionJournaliere.put(date, patrimoine.projectionFuture(date)));
     return evolutionJournaliere;
   }
+
+  public List<Integer> serieValeurMarchePatrimoine() {
+    return serieComptableTemporelle.serieValeursMarchePatrimoine();
+  }
 }
