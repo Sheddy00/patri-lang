@@ -170,7 +170,8 @@ operation
     |   operationTemplateCall
     |   ligneVariableDeclaration
     |   ligneCasOperations
-
+    |   valeurMarche
+    |   vente
     ;
 
 ligneCasOperations
