@@ -12,6 +12,7 @@ import school.hei.patrimoine.modele.Devise;
 import school.hei.patrimoine.modele.Personne;
 import school.hei.patrimoine.modele.objectif.Objectif;
 import school.hei.patrimoine.modele.possession.*;
+import school.hei.patrimoine.modele.vente.ValeurMarche;
 
 public class ZetyPersonnelCas extends Cas {
   private final Compte zetyPersonnel;
@@ -26,7 +27,10 @@ public class ZetyPersonnelCas extends Cas {
       Compte zetyPersonnel,
       Compte zetyLoyerMaison,
       Creance zetyCreance,
-      Dette zetyDette) {
+      Dette zetyDette,
+      ValeurMarche valeurMarche1,
+      ValeurMarche valeurMarche2,
+      ValeurMarche valeurMarche3) {
     super(ajd.plusMonths(1).plusDays(5), finSimulation.minusYears(1), possesseurs);
     this.zetyPersonnel = zetyPersonnel;
     this.zetyLoyerMaison = zetyLoyerMaison;

@@ -8,6 +8,9 @@
  
 # Dates
 * Dates:ajd: le 10 du 01-2025
+* Dates:date1: le 14 du 02-2025
+* Dates:date2: le 26 du 02-2025
+* Dates:date3: le 9 du 03-2025
 * Dates:finSimulation: le 10 du 04-2025
 
 # Personnes
