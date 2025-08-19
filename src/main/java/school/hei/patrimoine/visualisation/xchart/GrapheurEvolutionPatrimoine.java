@@ -1,13 +1,6 @@
 package school.hei.patrimoine.visualisation.xchart;
 
-import static java.awt.Color.BLACK;
-import static java.awt.Color.BLUE;
-import static java.awt.Color.DARK_GRAY;
-import static java.awt.Color.GREEN;
-import static java.awt.Color.MAGENTA;
-import static java.awt.Color.RED;
-import static java.awt.Color.WHITE;
-import static java.awt.Color.YELLOW;
+import static java.awt.Color.*;
 import static java.nio.file.Files.createTempFile;
 import static java.util.Comparator.comparing;
 import static java.util.UUID.randomUUID;
@@ -105,6 +98,14 @@ public class GrapheurEvolutionPatrimoine
               p -> OBLIGATION.equals(p.typeAgregat())),
           new StyleSerie(YELLOW, FAT, DASH, false));
     }
+    if (grapheConf.avecValeurMarche()) {
+      addSerie(
+          chart,
+          "Valeur de marché",
+          dates,
+          ep.serieValeurMarchePatrimoine(),
+          new StyleSerie(PINK, FAT, CONTINUOUS, false));
+    }
   }
 
   private void configureSerie(
@@ -189,7 +190,7 @@ public class GrapheurEvolutionPatrimoine
   }
 
   public File apply(EvolutionPatrimoine ep) {
-    return apply(ep, new GrapheConf(false, false, true, true, true));
+    return apply(ep, new GrapheConf(false, false, true, true, true, true));
   }
 
   private void configureStyle(XYChart chart) {
