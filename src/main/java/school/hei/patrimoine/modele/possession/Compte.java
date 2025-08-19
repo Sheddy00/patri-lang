@@ -42,12 +42,12 @@ public sealed class Compte extends Possession permits Dette, Creance {
     }
 
     Compte compteProjete =
-            new Compte(
-                    nom,
-                    dateOuverture,
-                    tFutur,
-                    valeurComptable.minus(financementsFuturs(tFutur), tFutur),
-                    fluxArgents.stream().map(f -> f.projectionFuture(tFutur)).collect(toSet()));
+        new Compte(
+            nom,
+            dateOuverture,
+            tFutur,
+            valeurComptable.minus(financementsFuturs(tFutur), tFutur),
+            fluxArgents.stream().map(f -> f.projectionFuture(tFutur)).collect(toSet()));
 
     this.valeursMarche.forEach(compteProjete::ajouterValeurMarche);
 
