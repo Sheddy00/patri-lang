@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 import school.hei.patrimoine.modele.Argent;
 import school.hei.patrimoine.modele.Devise;
@@ -33,7 +34,7 @@ public abstract sealed class Possession extends Objectivable
   protected final String nom;
   protected final LocalDate t;
   protected final Argent valeurComptable;
-  @EqualsAndHashCode.Exclude protected final Set<ValeurMarche> valeursMarche;
+  @EqualsAndHashCode.Exclude @Getter protected final Set<ValeurMarche> valeursMarche;
 
   @EqualsAndHashCode.Exclude @ToString.Exclude private CompteCorrection compteCorrection;
   @EqualsAndHashCode.Exclude @ToString.Exclude private LocalDate dateVente;
@@ -115,9 +116,12 @@ public abstract sealed class Possession extends Objectivable
 
   public void ajouterValeurMarche(ValeurMarche valeurMarche) {
     TypeAgregat typeAgregat = typeAgregat();
-    if (typeAgregat != TypeAgregat.IMMOBILISATION && typeAgregat != TypeAgregat.ENTREPRISE) {
+    if (typeAgregat != TypeAgregat.IMMOBILISATION
+        && typeAgregat != TypeAgregat.ENTREPRISE
+        && typeAgregat != TypeAgregat.TRESORERIE) {
       throw new UnsupportedOperationException(
-          "Seules les IMMOBILISATIONs et ENTREPRISEs peuvent avoir une valeur de marché");
+          "Seules les IMMOBILISATIONs, ENTREPRISEs et TRESORERIEs peuvent avoir une valeur de"
+              + " marché");
     }
     valeursMarche.add(valeurMarche);
   }
