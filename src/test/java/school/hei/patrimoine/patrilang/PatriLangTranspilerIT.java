@@ -60,6 +60,10 @@ class PatriLangTranspilerIT {
         expected.patrimoine().getValeurComptable(),
         actual.patrimoine().getValeurComptable(),
         "Valeur comptable mismatch");
+    assertEquals(
+        expected.patrimoine().getValeurMarche(),
+        actual.patrimoine().getValeurMarche(),
+        "Valeur marché mismatch");
     assertPossesseursEquals(
         expected.patrimoine().getPossesseurs(), actual.patrimoine().getPossesseurs());
     assertPossessionsEquals(expected.possessions(), actual.possessions());
