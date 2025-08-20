@@ -20,9 +20,9 @@
 # Initialisation
 * `objectifInitZetyPersonnel` Dates:ajd, objectif de 1000000Ar pour Trésoreries:zetyPersonnel
 * `initComptePersonnel` Dates:ajd, entrer 1000000Ar vers Trésoreries:zetyPersonnel
-* `valeurMarche1` Dates:date1, Trésoreries:zetyPersonnel valant 50000Ar
-* `valeurMarche2` Dates:date2, Trésoreries:zetyPersonnel valant 0Ar
-* `valeurMarche3` Dates:date3, Trésoreries:zetyPersonnel valant 0Ar
+* `valeurMarche1` Dates:date1, Trésoreries:zetyPersonnel valant 6000000Ar
+* `valeurMarche2` Dates:date2, Trésoreries:zetyPersonnel valant 1000000Ar
+* `valeurMarche3` Dates:date3, Trésoreries:zetyPersonnel valant 50000Ar
  
 # Opérations
 ## TrainDeVie, Dates:ajd, devise en Ar
