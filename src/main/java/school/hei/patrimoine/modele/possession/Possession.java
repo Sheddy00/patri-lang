@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.ToString;
 import school.hei.patrimoine.modele.Argent;
 import school.hei.patrimoine.modele.Devise;
