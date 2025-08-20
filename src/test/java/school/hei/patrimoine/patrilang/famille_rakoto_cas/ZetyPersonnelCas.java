@@ -27,10 +27,7 @@ public class ZetyPersonnelCas extends Cas {
       Compte zetyPersonnel,
       Compte zetyLoyerMaison,
       Creance zetyCreance,
-      Dette zetyDette,
-      ValeurMarche valeurMarche1,
-      ValeurMarche valeurMarche2,
-      ValeurMarche valeurMarche3) {
+      Dette zetyDette) {
     super(ajd.plusMonths(1).plusDays(5), finSimulation.minusYears(1), possesseurs);
     this.zetyPersonnel = zetyPersonnel;
     this.zetyLoyerMaison = zetyLoyerMaison;
@@ -52,6 +49,7 @@ public class ZetyPersonnelCas extends Cas {
   protected void init() {
     new Objectif(zetyPersonnel, ajd, ariary(1_000_000));
     new FluxArgent("initComptePersonnel", zetyPersonnel, ajd, ariary(1_000_000));
+    new ValeurMarche(zetyPersonnel, LocalDate.of(2025, FEBRUARY, 14), ariary(6_000_000));
   }
 
   @Override
